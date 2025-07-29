@@ -6,9 +6,9 @@ return {
     priority = 1000,
     config = function()
       require("onenord").setup({
-        theme = "dark",              -- "dark" or "light"
-        borders = true,              -- Split and float window borders
-        fade_nc = false,             -- Dim inactive windows
+        theme = "dark",
+        borders = true,
+        fade_nc = false,
         styles = {
           comments = "italic",
           strings = "NONE",
@@ -17,17 +17,26 @@ return {
           variables = "NONE",
         },
         disable = {
-          background = true,         -- Enable transparency
+          background = true,
           cursorline = false,
-          eob_lines = true           -- Hide ~ lines at end of buffer
+          eob_lines = true
         },
         custom_highlights = {
-          -- Optional: override highlights here
           Normal = { bg = "NONE" },
           NormalFloat = { bg = "NONE" },
           FloatBorder = { bg = "NONE" },
           SignColumn = { bg = "NONE" },
           Pmenu = { bg = "NONE" },
+
+          -- Telescope transparency
+          TelescopeNormal = { bg = "NONE" },
+          TelescopeBorder = { bg = "NONE" },
+          TelescopePromptNormal = { bg = "NONE" },
+          TelescopePromptBorder = { bg = "NONE" },
+          TelescopeResultsNormal = { bg = "NONE" },
+          TelescopeResultsBorder = { bg = "NONE" },
+          TelescopePreviewNormal = { bg = "NONE" },
+          TelescopePreviewBorder = { bg = "NONE" },
         },
       })
 
