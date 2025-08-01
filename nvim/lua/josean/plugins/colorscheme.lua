@@ -1,50 +1,52 @@
 return {
   {
-    "rmehri01/onenord.nvim",
-    name = "onenord",
+    "gmr458/vscode_modern_theme.nvim",
+    name = "vscode_modern_theme",
     lazy = false,
     priority = 1000,
     config = function()
-      require("onenord").setup({
-        theme = "dark",
-        borders = true,
-        fade_nc = false,
-        disable = {
-          background = true, -- Enables transparent background
-        },
+      -- 🧱 Theme setup with transparency
+      require("vscode_modern").setup({
+        transparent = true,           -- Core transparent flag
+        italic_comments = true,
+        disable_nvimtree_bg = true,   -- Removes nvim-tree background by default
       })
 
-      vim.cmd("colorscheme onenord")
+      vim.cmd("colorscheme vscode_modern")
 
+      -- 🎨 Transparent backgrounds for all major UI components
       local hl = vim.api.nvim_set_hl
+      local groups = {
+        -- Core UI
+        "Normal", "NormalNC", "NormalFloat", "EndOfBuffer",
+        "FloatBorder", "VertSplit", "WinSeparator",
+        "CursorLine", "CursorLineNr", "LineNr",
+        "SignColumn", "StatusLine", "TabLine", "TabLineFill", "TabLineSel",
 
-      -- 🌌 General background transparency
-      hl(0, "Normal", { bg = "NONE" })
-      hl(0, "NormalNC", { bg = "NONE" })
-      hl(0, "NormalFloat", { bg = "NONE" })
-      hl(0, "FloatBorder", { bg = "NONE" })
-      hl(0, "WinSeparator", { bg = "NONE" })
-      hl(0, "VertSplit", { bg = "NONE" })
+        -- Telescope
+        "TelescopeNormal", "TelescopeBorder",
+        "TelescopePromptNormal", "TelescopePromptBorder",
+        "TelescopeResultsNormal", "TelescopeResultsBorder",
+        "TelescopePreviewNormal", "TelescopePreviewBorder",
 
-      -- 🔭 Telescope transparency
-      hl(0, "TelescopeNormal", { bg = "NONE" })
-      hl(0, "TelescopeBorder", { bg = "NONE" })
-      hl(0, "TelescopePromptNormal", { bg = "NONE" })
-      hl(0, "TelescopePromptBorder", { bg = "NONE" })
-      hl(0, "TelescopeResultsNormal", { bg = "NONE" })
-      hl(0, "TelescopeResultsBorder", { bg = "NONE" })
-      hl(0, "TelescopePreviewNormal", { bg = "NONE" })
-      hl(0, "TelescopePreviewBorder", { bg = "NONE" })
+        -- nvim-cmp popup menu
+        "Pmenu", "PmenuSel", "PmenuSbar", "PmenuThumb",
 
-      -- 🎯 nvim-cmp (completion menu) transparency
-      hl(0, "Pmenu", { bg = "NONE" })
-      hl(0, "PmenuSel", { bg = "NONE" })
-      hl(0, "PmenuThumb", { bg = "NONE" })
-      hl(0, "PmenuSbar", { bg = "NONE" })
+        -- LSP and floating windows
+        "FloatTitle", "LspFloatWinNormal", "NormalFloat",
+        "DiagnosticFloatingError", "DiagnosticFloatingHint",
+        "DiagnosticFloatingWarn", "DiagnosticFloatingInfo",
 
-      -- Optional: for floating LSP popups
-      hl(0, "FloatTitle", { bg = "NONE" })
-      hl(0, "LspFloatWinNormal", { bg = "NONE" }) -- sometimes used in LSP UIs
+        -- Key suggestion plugin (like which-key)
+        "WhichKeyFloat",
+
+        -- ✅ nvim-tree specific
+        "NvimTreeNormal", "NvimTreeNormalNC", "NvimTreeEndOfBuffer", "NvimTreeVertSplit",
+      }
+
+      for _, group in ipairs(groups) do
+        hl(0, group, { bg = "NONE", ctermbg = "NONE" })
+      end
     end,
   },
 }
