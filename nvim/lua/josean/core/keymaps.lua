@@ -32,6 +32,11 @@ keymap.set("n", "<leader>sn", "<C-w>w", { desc = "Go to next split" })
 vim.keymap.set("n", "<leader>ee", "<cmd>NvimTreeToggle<cr>", { desc = "Toggle file explorer" })
 
 
+vim.keymap.set("n", "<leader>a", "ggVG", { desc = "Select all text" })
+
+-- keymaps for the wasd navigation 
+
+
 
 -- Leader + e + f: Focus file explorer or find current file
 vim.keymap.set("n", "<leader>ef", function()
@@ -49,3 +54,69 @@ vim.keymap.set("n", "<leader>ef", function()
     vim.cmd("NvimTreeFindFile")
   end
 end, { desc = "Focus file explorer or find current file" })
+
+
+
+-- Delete the current line
+keymap.set("n", "<leader>dd", "dd", { desc = "Delete current line" })
+
+
+
+-- Move visual selection up and replace line above
+function MoveSelectionUpReplace()
+  local start_line = vim.fn.line("'<")
+  local end_line = vim.fn.line("'>")
+  if start_line <= 1 then return end
+
+  -- Delete line above and move selection
+  vim.cmd((start_line - 1) .. "delete _")
+  vim.cmd("normal! gv")
+  vim.cmd(":m '<-2")
+  vim.cmd("normal! gv=gv")
+end
+
+-- Move visual selection down and replace line below
+function MoveSelectionDownReplace()
+  local end_line = vim.fn.line("'>")
+  local total_lines = vim.fn.line("$")
+  if end_line >= total_lines then return end
+
+  -- Delete line below and move selection
+  vim.cmd((end_line + 1) .. "delete _")
+  vim.cmd("normal! gv")
+  vim.cmd(":m '>+1")
+  vim.cmd("normal! gv=gv")
+end
+
+
+keymap.set("v", "<leader>u", MoveSelectionUpReplace, { desc = "Move selection up and replace", silent = true })
+keymap.set("v", "<leader>n", MoveSelectionDownReplace, { desc = "Move selection down and replace", silent = true })
+
+keymap.set("n", "<leader>fr", [[:%s///g<Left><Left><Left>]], { desc = "Find and replace in entire file" })
+
+
+vim.keymap.set("n", "<leader>fa", [[:%s///g<Left><Left><Left>]], { desc = "Find and replace (manual)" })
+
+
+
+
+
+
+
+
+
+
+
+vim.keymap.set("v", "<leader>c", function()
+  -- Get the visual selection range
+  local start_line = vim.fn.line("v")
+  local end_line = vim.fn.line(".")
+  
+  -- Ensure start_line <= end_line
+  if start_line > end_line then
+    start_line, end_line = end_line, start_line
+  end
+  
+  -- Copy the lines
+  vim.cmd(start_line .. "," .. end_line .. "copy " .. end_line)
+end, { desc = "Duplicate selected lines below" })
