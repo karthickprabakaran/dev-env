@@ -1,44 +1,62 @@
 return {
   {
-    "rmehri01/onenord.nvim",
-    name = "onenord",
+    "AlexvZyl/nordic.nvim",
+    name = "nordic",
     lazy = false,
     priority = 1000,
     config = function()
-      require("onenord").setup({
-        borders = true,
-        fade_nc = false,
-        style = "dark", -- or "light"
-        disable = {
-          background = true, -- 🟢 enables transparency
+      require("nordic").setup({
+        transparent = {
+          bg = true,
+          float = true,
         },
-        custom_highlights = {},
+        bold_keywords = false,
+        italic_comments = true,
+        bright_border = true,
+        reduced_blue = true,
+        swap_backgrounds = false,
+        telescope = { style = "flat" },
+        ts_context = { dark_background = true },
       })
+      vim.cmd.colorscheme("nordic")
 
-      vim.cmd("colorscheme onenord")
-
-      -- Optional: Force transparent backgrounds for more UI groups
+      -- Set custom highlight overrides
       local hl = vim.api.nvim_set_hl
       local groups = {
         "Normal", "NormalNC", "NormalFloat", "EndOfBuffer",
         "FloatBorder", "VertSplit", "WinSeparator",
         "CursorLine", "CursorLineNr", "LineNr",
-        "SignColumn", "StatusLine", "TabLine", "TabLineFill", "TabLineSel",
+        "SignColumn", "StatusLine", "TabLine", "TabLineSel", "TabLineFill",
         "TelescopeNormal", "TelescopeBorder",
         "TelescopePromptNormal", "TelescopePromptBorder",
         "TelescopeResultsNormal", "TelescopeResultsBorder",
         "TelescopePreviewNormal", "TelescopePreviewBorder",
-        "Pmenu", "PmenuSel", "PmenuSbar", "PmenuThumb",
-        "FloatTitle", "LspFloatWinNormal", "NormalFloat",
-        "DiagnosticFloatingError", "DiagnosticFloatingHint",
-        "DiagnosticFloatingWarn", "DiagnosticFloatingInfo",
-        "WhichKeyFloat",
-        "NvimTreeNormal", "NvimTreeNormalNC", "NvimTreeEndOfBuffer", "NvimTreeVertSplit",
+        "Pmenu", "PmenuSbar", "PmenuThumb",
+        "FloatTitle", "LspFloatWinNormal", "DiagnosticFloatingError",
+        "DiagnosticFloatingHint", "DiagnosticFloatingWarn",
+        "DiagnosticFloatingInfo", "WhichKeyFloat",
+        "NvimTreeNormal", "NvimTreeNormalNC", "NvimTreeEndOfBuffer",
+        "NvimTreeVertSplit",
       }
 
-      for _, group in ipairs(groups) do
-        hl(0, group, { bg = "NONE", ctermbg = "NONE" })
+      for _, grp in ipairs(groups) do
+        hl(0, grp, { bg = "NONE", ctermbg = "NONE" })
       end
+
+      -- 🎨 Visual selection highlight
+      hl(0, "Visual", {
+        bg = "#4C566A",
+        fg = "NONE",
+        blend = 0,
+      })
+
+      -- ✅ Fix nvim-cmp selection highlight
+      hl(0, "PmenuSel", {
+        bg = "#3B4252", -- soft dark gray for selected item
+        fg = "NONE",
+      })
+      hl(0, "PmenuSbar", { bg = "#4C566A" })
+      hl(0, "PmenuThumb", { bg = "#81A1C1" })
     end,
   },
-  }
+}
