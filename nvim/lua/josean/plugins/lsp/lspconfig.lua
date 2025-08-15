@@ -10,14 +10,54 @@ return {
       local lspconfig = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-      -- HTML
-      lspconfig.html.setup({ capabilities = capabilities })
+      -- on_attach function to map keys after LSP attaches
+      local on_attach = function(client, bufnr)
+        local buf_set_keymap = function(mode, lhs, rhs, opts)
+          opts = opts or { noremap = true, silent = true }
+          vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
+        end
+
+        -- LSP keymaps
+        buf_set_keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>")        -- Hover
+        buf_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>")   -- Go to definition
+        buf_set_keymap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>")
+        buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
+        buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
+        buf_set_keymap("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>") -- Signature help
+      end
+
+      -- HTML with JSX/TSX support
+      lspconfig.html.setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+        filetypes = { "html", "javascriptreact", "typescriptreact", "tsx" },
+      })
 
       -- CSS
-      lspconfig.cssls.setup({ capabilities = capabilities })
+      lspconfig.cssls.setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
 
-      -- JavaScript/TypeScript
-      lspconfig.tsserver.setup({ capabilities = capabilities })
+      -- TypeScript / JavaScript
+      lspconfig.tsserver.setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
+
+      -- Optional: Emmet for JSX/HTML expansions
+      lspconfig.emmet_ls.setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+        filetypes = { "html", "css", "javascriptreact", "typescriptreact" },
+        init_options = {
+          html = {
+            options = {
+              ["bem.enabled"] = true,
+            },
+          },
+        },
+      })
     end,
   },
 
